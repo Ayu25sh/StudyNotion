@@ -13,16 +13,20 @@ export default function ChipInput({
 }) {
     const { editCourse, course } = useSelector((state) => state.course)
     const [chips, setChips] = useState([])
-    
+
+
     useEffect(() => {
+
         if (editCourse) {
             // console.log(course)
+            // manually populate the chips with existing course tags 
             setChips(course?.tag)
         }
         register(name, { required: true, validate: (value) => value.length > 0 })
     }, [])
 
     useEffect(() => {
+        // manually set the value of the form field.Here,it updates the form state to store the current chips(list of tags)
         setValue(name, chips)
     }, [chips])
 
@@ -52,6 +56,7 @@ export default function ChipInput({
         <label className="text-sm text-richblack-5" htmlFor={name}> {label} <sup className="text-pink-200">*</sup> </label>
 
         <div className="flex w-full flex-wrap gap-y-2">
+            {/* code for appearing tags */}
             {chips.map((chip, index) => (
                 <div key={index}
                     className="m-1 flex items-center rounded-full bg-yellow-400 px-2 py-1 text-sm text-richblack-5"
@@ -67,7 +72,8 @@ export default function ChipInput({
                 </div>
                 ))
             }    
-
+            
+            {/* input field */}
             <input
                 id={name}
                 name={name}

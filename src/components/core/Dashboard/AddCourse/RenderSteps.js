@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { FaCheck } from "react-icons/fa";
+import CourseBuilderForm from './CourseBuilder/CourseBuilderForm';
 
 import CourseInformationForm from "./CourseInformation/CourseInformationForm"
 
@@ -27,6 +28,7 @@ const RenderSteps = () => {
             {
                 steps.map( (item) => (
                     <>
+                        {/* for creating circles with 1,2,3 */}
                         <div key={item.id} className="flex flex-col items-center" >
                              <div className={` grid cursor-default aspect-square w-[34px] place-items-center rounded-full border-[1px] ${step === item.id 
                                 ? "bg-yellow-900 border-yellow-50 text-yellow-50"
@@ -57,6 +59,7 @@ const RenderSteps = () => {
             {
                 steps.map( (item,index) => (
                     <>
+                        {/* code for title */}
                         <div key={item.id}
                             className="flex min-w-[130px] flex-col items-center gap-y-2" 
                         >
@@ -73,8 +76,8 @@ const RenderSteps = () => {
 
         {/* Render specific component based on current step */}
         {step === 1 && <CourseInformationForm />}
-        {/* {step === 2 && <CourseBuilderForm />}
-        {step === 3 &&  <PublishCourse /> } */}
+        {step === 2 && <CourseBuilderForm />}
+        {/* {step === 3 &&  <PublishCourse /> }  */}
     </>
   )
 }

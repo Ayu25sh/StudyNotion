@@ -3,9 +3,9 @@ import RenderSteps from "./RenderSteps"
 
 export default function AddCourse() {
   return (
-    <div className='text-white'>
-        <div>
-            <h1>Add Course</h1>
+    <div className='text-white flex justify-between' >
+        <div className='min-w-[500px] '>
+            <h1 className='text-4xl text-richblack-5 '>Add Course</h1>
             {/* whole form section */}
             <div>
                 <RenderSteps />
