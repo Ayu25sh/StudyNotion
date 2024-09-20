@@ -48,11 +48,11 @@ const CourseInformationForm = () => {
             setValue("courseTitle",course.courseName);
             setValue("courseShortDesc",course.courseDescription);
             setValue("coursePrice",course.price);
-            // setValue("courseTags",course.tag);
+            setValue("courseTags",course.tag);
             setValue("courseCategory", course.category)
             setValue("courseBenefits",course.whatYouWillLearn);
             setValue("courseRequirements",course.instructions);
-            // setValue("courseImage",course.thumbnail);
+            setValue("courseImage",course.thumbnailImage);
         }
 
         getCategories();
@@ -63,10 +63,10 @@ const CourseInformationForm = () => {
         if(currentValues.courseTitle !== course.courseName || 
             currentValues.courseShortDesc !== course.courseDescription || 
             currentValues.coursePrice !== course.price || 
-            // currentValues.courseTags.toString() !== course.tag.toString()) || 
+            currentValues.courseTags.toString() !== course.tag.toString() || 
             currentValues.courseBenefits !== course.whatYouWillLearn || 
             currentValues.courseCategory !== course.category._id || 
-            // currentValues.courseImage !== course.thumbnail || 
+            currentValues.courseImage !== course.thumbnailImage || 
             currentValues.courseRequirements.toString() !== course.courseInstructions.toString()) 
             return true
         else 
@@ -95,9 +95,9 @@ const CourseInformationForm = () => {
               if (currentValues.coursePrice !== course.price) {
                 formData.append("price", data.coursePrice)
               }
-            //   if (currentValues.courseTags.toString() !== course.tag.toString()) {
-            //     formData.append("tag", JSON.stringify(data.courseTags))
-            //   }
+              if (currentValues.courseTags.toString() !== course.tag.toString()) {
+                formData.append("tag", JSON.stringify(data.courseTags))
+              }
               if (currentValues.courseBenefits !== course.whatYouWillLearn) {
                 formData.append("whatYouWillLearn", data.courseBenefits)
               }
@@ -113,10 +113,10 @@ const CourseInformationForm = () => {
                   JSON.stringify(data.courseRequirements)
                 )
               }
-            //   if (currentValues.courseImage !== course.thumbnail) {
-            //     formData.append("thumbnailImage", data.courseImage)
-            //   }
-              // console.log("Edit Form data: ", formData)
+              if (currentValues.courseImage !== course.thumbnailImage) {
+                formData.append("thumbnailImage", data.courseImage)
+              }
+            // console.log("Edit Form data: ", formData)
               setLoading(true)
               const result = await editCourseDetails(formData, token)
               setLoading(false)
@@ -130,20 +130,21 @@ const CourseInformationForm = () => {
             return
         }
       
-          //create a new course
+        // ----------------    create a new course
           const formData = new FormData();
           formData.append("courseName", data.courseTitle)
           formData.append("courseDescription", data.courseShortDesc)
           formData.append("whatYouWillLearn", data.courseBenefits)
           formData.append("price", data.coursePrice)
-        //   formData.append("tag", JSON.stringify(data.courseTags))
-          
+          formData.append("tag", JSON.stringify(data.courseTags))
           formData.append("category", data.courseCategory)
           console.log("Course Category ID:", data.courseCategory);
           formData.append("status", COURSE_STATUS.DRAFT)
           formData.append("instructions", JSON.stringify(data.courseRequirements))
-        //   formData.append("thumbnailImage", data.courseImage)
-        console.log("Formdata",formData)
+          console.log("before image",data.courseImage );
+          formData.append("thumbnailImage", data.courseImage)
+          console.log("before image",data.courseImage);
+          console.log("Formdata",formData)
         try{
           setLoading(true)
           console.log("before hit createCourse")
