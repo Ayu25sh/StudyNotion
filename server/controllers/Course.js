@@ -11,19 +11,22 @@ exports.createCourse = async(req,res) => {
             courseDescription,
             whatYouWillLearn,
             price,
-            //tag,
+            tag,
             category,
             status,
             instructions} = req.body;
 
         //get thumbnail
-        // const thumbnail = req.files.thumbnailImage;
+        const thumbnail = req.files.thumbnailImage;
 
         if( !courseName ||
             !courseDescription ||
             !whatYouWillLearn ||
             !price ||
-            !category
+            !category ||
+            !tag ||
+            !instructions ||
+            !thumbnail
             ){
             return res.status(400).json({
                 success:true,
@@ -57,25 +60,29 @@ exports.createCourse = async(req,res) => {
               message: "Category Details Not Found",
             })
           }
-          // Upload the Thumbnail to Cloudinary
-        // const thumbnailImage = await uploadImageToCloudinary(
-        //     thumbnail,
-        //     process.env.FOLDER_NAME
-        //   )
-        //   console.log(thumbnailImage)
-          // Create a new course with the given details
+
+        // Upload the Thumbnail to Cloudinary
+        const thumbnailImage = await uploadImageToCloudinary(
+            thumbnail,
+            process.env.FOLDER_NAME
+        )
+        console.log("In Server",thumbnailImage)
+
+
+        // Create a new course with the given details
           const newCourse = await Course.create({
             courseName,
             courseDescription,
             instructor: instructorDetails._id,
             whatYouWillLearn: whatYouWillLearn,
             price,
-            //tag,
+            tag,
             category: categoryDetails._id,
-            //thumbnail: thumbnailImage.secure_url,
+            thumbnailImage: thumbnailImage.secure_url,
             status: status,
             instructions,
           })
+          console.log(newCourse);
         //get instructor id
         
 
