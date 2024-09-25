@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { HiOutlineCurrencyRupee } from "react-icons/hi";
 import { fetchCourseCategories,addCourseDetails,editCourseDetails } from '../../../../../services/operations/courseDetailsAPI';
 import RequirementField from './RequirementField';
-import { setStep } from '../../../../../Slices/courseSlice';
+import { setStep, setCourse } from '../../../../../Slices/courseSlice';
 import IconBtn from "../../../../common/IconBtn"
 import {toast} from "react-toastify"
 import { COURSE_STATUS } from "../../../../../utils/Constants"
@@ -22,7 +22,7 @@ const CourseInformationForm = () => {
     
     const dispatch = useDispatch();
     const {token} = useSelector(state => state.auth)
-    const {setCourse} = useSelector(state => state.course)
+    // const {setCourse} = useSelector(state => state.course)
     const {course,editCourse} = useSelector( state => state.course)
     const [loading,setLoading] = useState(false)
     const [courseCategories,setCourseCategories] = useState([]);
@@ -138,26 +138,33 @@ const CourseInformationForm = () => {
           formData.append("price", data.coursePrice)
           formData.append("tag", JSON.stringify(data.courseTags))
           formData.append("category", data.courseCategory)
-          console.log("Course Category ID:", data.courseCategory);
+        //   console.log("Course Category ID:", data.courseCategory);
           formData.append("status", COURSE_STATUS.DRAFT)
           formData.append("instructions", JSON.stringify(data.courseRequirements))
-          console.log("before image",data.courseImage );
+        //   console.log("before image",data.courseImage );
           formData.append("thumbnailImage", data.courseImage)
-          console.log("before image",data.courseImage);
-          console.log("Formdata",formData)
-        try{
-          setLoading(true)
-          console.log("before hit createCourse")
-          const result = await addCourseDetails(formData, token)
-          console.log("before hit createCourse")
-          if (result) {
-            dispatch(setStep(2))
-            dispatch(setCourse(result))
+        //   console.log("before image",data.courseImage);
+          console.log("Formdata in Form side",formData)
+          try {
+            setLoading(true);
+
+            console.log("Before hit from form side");
+            const result = await addCourseDetails(formData, token);
+            console.log("After hit from form side", result);
+          
+            if (result) {
+              // Successfully created course, move to step 2 and set the course in the state
+              dispatch(setStep(2));
+              dispatch(setCourse(result));
+            }
+          } catch (error) {
+            // Log the actual error for debugging purposes
+            console.log("Cannot add the Course. Error: ", error);
+          } finally {
+            // Ensure that loading is set to false regardless of success or failure
+            setLoading(false);
           }
-          setLoading(false)
-        }catch(error){
-            console.log("Cannot add the Course ");
-        }
+          
           
     }
 
