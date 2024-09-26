@@ -13,17 +13,19 @@ import NestedView from './NestedView'
 const CourseBuilderForm = () => {
 
   const {register,handleSubmit, setValue,formState:{errors}} = useForm();
-  const [editSectionName,setEditSectionName] = useState(null);
   const {course} = useSelector(state => state.course);
   const {token} = useSelector(state => state.auth);
   
   const dispatch = useDispatch();
   const [loading,setLoading] = useState(false);
+  const [editSectionName,setEditSectionName] = useState(null);
+
 
   const onSubmit = async(data) => {
     setLoading(true)
     let result
 
+    // deals with backend
     if(editSectionName) {
       result = await updateSection(
         {
@@ -37,13 +39,17 @@ const CourseBuilderForm = () => {
       result = await createSection({
         sectionName: data.sectionName,
         courseId: course._id,
+
       },token)
+      console.log("COURSE_ID",course._id)
+      console.log(result)
+
     }
 
-    //update values
+    //update values -- deals with frontend
     if(result){
       dispatch(setCourse(result))
-      setEditCourse(null)
+      setEditSectionName(null)
       setValue("sectionName","");
     }
 
@@ -87,6 +93,8 @@ const CourseBuilderForm = () => {
     <div>
       <p>Course Builder</p>
       <form onSubmit={handleSubmit(onSubmit)}>
+
+        {/* section name*/}
         <div>
           <label htmlFor='sectionName'>Section name<sup>*</sup></label>
           <input 
@@ -98,6 +106,8 @@ const CourseBuilderForm = () => {
             <span>Section Name is required</span>
           )}
         </div>
+
+        {/* button nd icon */}
         <div className='flex text-richblack-5'>
           <IconBtn
             type="Submit"
@@ -119,6 +129,7 @@ const CourseBuilderForm = () => {
           )}
         </div>
       </form>
+
 
         {course.courseContent.length > 0 && (
           <NestedView handleChangeSectionName ={handleChangeSectionName} />
