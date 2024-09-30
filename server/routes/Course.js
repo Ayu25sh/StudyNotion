@@ -6,6 +6,7 @@ const {
     createCourse,
     showAllCourses,
     getCourseDetails,
+    editCourse
 } = require("../controllers/Course")
 
 //Categories handlers import
@@ -25,8 +26,8 @@ const {
 //subSections handler import
 const {
     createSubSection,
-    // updateSubSection,
-    // deleteSubSection
+    updateSubSection,
+    deleteSubSection
 } = require("../controllers/subSection");
 
 //Rating handlers import
@@ -52,6 +53,8 @@ const {
 router.post("/createCourse",auth,isInstructor,createCourse)
 router.get("/allCourses",showAllCourses)
 router.get("/getCourseDetails",getCourseDetails)
+router.put("/editCourse",auth,isInstructor,editCourse)
+
 
 
 // *********************************************************************************
@@ -63,8 +66,8 @@ router.post("/updateSection",auth,isInstructor,updateSection)
 router.delete("/deleteSection",auth,isInstructor,deleteSection)
 
 router.post("/addSubSection",auth,isInstructor,createSubSection)
-//router.post("/updateSubSection",auth,isInstructor,updateSubSection)
-//router.delete("/deleteSubSection",auth,isInstructor,deleteSubSection)
+router.post("/updateSubSection",auth,isInstructor,updateSubSection)
+router.delete("/deleteSubSection",auth,isInstructor,deleteSubSection)
 
 
 
