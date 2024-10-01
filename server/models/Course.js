@@ -21,8 +21,11 @@ const courseSchema = new mongoose.Schema({
         {
             type:mongoose.Schema.Types.ObjectId,
             ref:"Section",
-        }
+        },
     ],
+
+    //an array where each element inside the array is an object with a type key and the value is id.
+
     ratingAndReview:[
         {
             type:mongoose.Schema.Types.ObjectId,
@@ -35,10 +38,13 @@ const courseSchema = new mongoose.Schema({
     thumbnailImage:{
         type:String
     },
-    tag:[{
-        type:String,
+
+    tag:{
+        type:[String],
         required:true,
-    }],
+    },
+    //The field is an array of strings (i.e., each entry in the array must be of type String).
+
     category:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Category",
@@ -51,11 +57,11 @@ const courseSchema = new mongoose.Schema({
         }
     ],
     instructions: {
-        type:String,
+        type:[String],
     },
     status: {
         type:String,
-        enum: ["Draft","Published"],
+        enum: ["Draft","Published"], // the value of status is either draft or published 
     },
     createdAt: {
 		type:Date,
