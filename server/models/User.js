@@ -24,8 +24,16 @@ const userSchema = new mongoose.Schema({
     accountType: {
         type:String,
         enum:["Admin","Instructor","Student"],
-        requird:true,
+        required:true,
      },
+    active: {
+        type: Boolean,
+        default: true,
+    },
+    approved: {
+        type: Boolean,
+        default: true,
+    },
     additionalDetails: {
         type:mongoose.Schema.Types.ObjectId,
         required:true,
@@ -54,6 +62,10 @@ const userSchema = new mongoose.Schema({
         }
     ],
 
-});
+},
+{ timestamps: true } // Add timestamps for when the document is created and last modified
+
+
+);
 
 module.exports = mongoose.model("User",userSchema);
