@@ -31,9 +31,9 @@ const CourseInformationForm = () => {
         const getCategories = async() => {
             try{
                 setLoading(true);
-                console.log("before fetch category")
+                // console.log("before fetch category")
                 const categories = await fetchCourseCategories();
-                console.log("after fetch category",categories)
+                // console.log("after fetch category",categories)
                 if(categories.length > 0){
                     setCourseCategories(categories);
                 }
@@ -48,6 +48,9 @@ const CourseInformationForm = () => {
             setValue("courseTitle",course.courseName);
             setValue("courseShortDesc",course.courseDescription);
             setValue("coursePrice",course.price);
+            console.log("Tags",course.tag);
+            console.log("Instructions",course.instructions);
+
             setValue("courseTags",course.tag);
             setValue("courseCategory", course.category)
             setValue("courseBenefits",course.whatYouWillLearn);
@@ -67,7 +70,7 @@ const CourseInformationForm = () => {
             currentValues.courseBenefits !== course.whatYouWillLearn || 
             currentValues.courseCategory !== course.category._id || 
             currentValues.courseImage !== course.thumbnailImage || 
-            currentValues.courseRequirements.toString() !== course.courseInstructions.toString()) 
+            currentValues.courseRequirements.toString() !== course.instructions.toString()) 
             return true
         else 
             return false;
@@ -270,7 +273,7 @@ const CourseInformationForm = () => {
             register={register}
             setValue={setValue}
             errors={errors}
-            editData={editCourse ? course?.thumbnail : null}
+            editData={editCourse ? course?.thumbnailImage : null}
         />
 
         {/* Benefits of the Course */}
@@ -311,7 +314,7 @@ const CourseInformationForm = () => {
             }
         </div>
         <IconBtn 
-            text={!editCourse ? "Next" : "Save Changes"}
+            text={!editCourse ? "Next" : "Save Changes"} icon={true}
         />
 
     </form>
