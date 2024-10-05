@@ -103,7 +103,7 @@ exports.createCourse = async(req,res) => {
         
 
         //update category schema
-        await Category.findByIdAndUpdate(
+        const res1 = await Category.findByIdAndUpdate(
           categoryDetails._id,
             {
                 $push:{
@@ -111,6 +111,8 @@ exports.createCourse = async(req,res) => {
                 }
             }
         )
+        console.log(res1);
+
 
         //return response
         return res.status(200).json({
@@ -155,52 +157,117 @@ exports.showAllCourses = async(req,res) => {
 }
 
 //getCourseDetails
-exports.getCourseDetails = async(req,res) => {
-    try{ 
-        //fetch id
-        const {courseId} = req.body;
-        //find course details 
-        const courseDetails = await Course.find(
-                                            {_id:courseId})
-                                            .populate({
-                                                path:"instructor",
-                                                populate:{
-                                                    path:"additionalDetails"
-                                                }
-                                            })
-                                            .populate({
-                                                path:"courseContent",
-                                                populate:{
-                                                    path:"subSection"
-                                                }
-                                            })
-                                            .populate("category")
-                                            // .populate("ratingAndReviews")
-                                            .exec();
-        console.log(courseDetails.courseContent);
-        //validation
-        if(!courseDetails){
-            return res.status(400).json({
-                success:false,
-                message:"Couldn't find the course for given course id"
-            })
-        }              
+// exports.getCourseDetails = async(req,res) => {
+//     try{ 
+//         //fetch id
+//         const {courseId} = req.body;
+//         console.log("id   --",courseId);
+//         //find course details 
+//         const courseDetails = await Course.find(
+//                                             {_id:courseId})
+//                                             .populate({
+//                                                 path:"instructor",
+//                                                 populate:{
+//                                                     path:"additionalDetails"
+//                                                 }
+//                                             })
+//                                             .populate({
+//                                                 path:"courseContent",
+//                                                 populate:{
+//                                                     path:"subSection"
+//                                                 }
+//                                             })
+//                                             .populate("category")
+//                                             // .populate("ratingAndReviews")
+//                                             .exec();
+//         console.log(courseDetails.courseContent);
+//         console.log(courseDetails);
+
+//         //validation
+//         if(!courseDetails){
+//             return res.status(400).json({
+//                 success:false,
+//                 message:"Couldn't find the course for given course id"
+//             })
+//         }              
         
-        // return res
-        return res.status(200).json({
-            success:true,
-            message:"Course Details fetched successfully",
-            courseDetails,
-        })
+//         // return res
+//         return res.status(200).json({
+//             success:true,
+//             message:"Course Details fetched successfully",
+//             courseDetails,
+//         })
 
 
-    }catch(error){
-        console.log(error);
-        return res.status(500).json({
-            success:false,
-            message:error.message,
-        })
+//     }catch(error){
+//         console.log(error);
+//         return res.status(500).json({
+//             success:false,
+//             message:error.message,
+//         })
+//     }
+// }
+
+exports.getCourseDetails = async (req, res) => {
+  try {
+    const { courseId } = req.body
+    const courseDetails = await Course.findOne({
+      _id: courseId,
+    })
+      .populate({
+        path: "instructor",
+        populate: {
+          path: "additionalDetails",
+        },
+      })
+      .populate("category")
+      .populate("ratingAndReview")
+      .populate({
+        path: "courseContent",
+        populate: {
+          path: "subSection",
+          select: "-videoUrl",
+        },
+      })
+      .exec()
+
+    if (!courseDetails) {
+      return res.status(400).json({
+        success: false,
+        message: `Could not find course with id: ${courseId}`,
+      })
     }
+
+    // if (courseDetails.status === "Draft") {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: `Accessing a draft course is forbidden`,
+    //   });
+    // }
+
+    let totalDurationInSeconds = 0
+    courseDetails.courseContent.forEach((content) => {
+      content.subSection.forEach((subSection) => {
+        const timeDurationInSeconds = parseInt(subSection.timeDuration)
+        totalDurationInSeconds += timeDurationInSeconds
+      })
+    })
+
+    const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        courseDetails,
+        totalDuration,
+      },
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    })
+  }
 }
 
 // Edit Course Details
@@ -330,9 +397,16 @@ exports.deleteCourse = async (req, res) => {
         }
       }
 
+      await Category.findByIdAndUpdate(course.category,{
+        $pull: { courses : courseId}
+      });
+
+
       // Delete the section
       await Section.findByIdAndDelete(sectionId)
     }
+
+
 
     // Delete the course
     await Course.findByIdAndDelete(courseId)
