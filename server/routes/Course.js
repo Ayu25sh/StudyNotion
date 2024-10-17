@@ -6,13 +6,16 @@ const {
     createCourse,
     showAllCourses,
     getCourseDetails,
-    editCourse
+    editCourse,
+    getInstructorCourses,
+    deleteCourse,
+    getFullCourseDetails,
 } = require("../controllers/Course")
 
 //Categories handlers import
 const {
     createCategory,
-    showAllCategory,
+    showAllCategories,
     categoryPageDetails,
 } = require("../controllers/Category")
 
@@ -52,8 +55,11 @@ const {
 
 router.post("/createCourse",auth,isInstructor,createCourse)
 router.get("/allCourses",showAllCourses)
-router.get("/getCourseDetails",getCourseDetails)
+router.post("/getCourseDetails",getCourseDetails)
 router.put("/editCourse",auth,isInstructor,editCourse)
+router.get("/getInstructorCourses",auth,isInstructor,getInstructorCourses)
+router.post("/getFullCourseDetails", auth, getFullCourseDetails)
+router.delete("/deleteCourse",auth,isInstructor,deleteCourse)
 
 
 
@@ -71,9 +77,13 @@ router.delete("/deleteSubSection",auth,isInstructor,deleteSubSection)
 
 
 
+// *********************************************************************************
+//                            Category
+// *********************************************************************************
+
 router.post("/createCategory",auth,isAdmin,createCategory)
-router.get("/showAllCategories",showAllCategory)
-router.get("/getCategoryPageDetails",categoryPageDetails)
+router.get("/showAllCategories",showAllCategories)
+router.post("/getCategoryPageDetails",categoryPageDetails)
 
 
 // ***********************************************************************************************************************
