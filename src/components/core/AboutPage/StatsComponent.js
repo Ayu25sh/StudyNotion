@@ -1,29 +1,47 @@
-import React from 'react'
+const Stats=[
+  {
+    count:"5K",
+    label:"Active Students"
+  }
+  ,
+  {
+    count:"10+",
+    label:"Mentors"
+  }
+  ,
+  {
+    count:"200+",
+    label:"Courses"
+  }
+  ,
+  {
+    count:"50+",
+    label:"Awards"
+  }
+];
 
-const Stats = [
-  {count:"5k" , label:"Active Students"},
-  {count:"10+" , label:"Mentors"},
-  {count:"200+" , label:"Courses"},
-  {count:"50+" , label:"Awards"},
-]
-
-const StatsComponent = () => {
+const StatsComponent=()=>{
   return (
-    <section>
-      <div className='mt-[50px] flex gap-x-20 ' >
-        {
-          Stats.map( (data,index) => {
-            return (
-              <div key={index} className='flex flex-col justify-between items-center' >
-                <h1>{data.count}</h1>
-                <h2>{data.label}</h2>
-              </div>
-            )
-          })
-        }
-      </div>
-    </section>
-  )
+      <section className=" w-full bg-richblack-800 px-28 py-24 ">
+        <div className=" w-full ">
+          <div className="flex flex-col md:flex-row text-center gap-10 md:gap-0 justify-evenly  mx-auto w-full">
+            {
+              Stats.map((data,index)=>(
+                <div key={index}>
+                  <h1 className="text-[30px] font-semibold leading-[38px] text-richblack-5">
+                    {data.count}
+                  </h1>
+                  <h2 className="text-[16px] font-semibold text-[#585D69] leading-[24px] ">
+                    {data.label}
+                  </h2>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+  );
+
 }
 
-export default StatsComponent
+export default StatsComponent;
