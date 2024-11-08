@@ -19,15 +19,15 @@ exports.createRating = async(req,res) => {
                 message:"Student is not enrolled in the course",
             });
         }
-        //check if user alraedy reveiewed the course
-        const alraedyReviewed = await RatingAndReview.findOne({
+        //check if user already reviewed the course
+        const alreadyReviewed = await RatingAndReview.findOne({
                                                         user:userId,
                                                         courseId:courseId,
                                                     });
-        if(alraedyReviewed){
+        if(alreadyReviewed){
             return res.status(403).json({
                 success:false,
-                message:"Course is alraedy reviewed by the user",
+                message:"Course is already reviewed by the user",
             })
         }
         // create review and rating
@@ -37,7 +37,7 @@ exports.createRating = async(req,res) => {
                                                     user:userId,
                                                 })
         //upadate course with this rating/review
-        const updatedCourseDetails = await Course.findbyIdAndUpdate(
+        const updatedCourseDetails = await Course.findByIdAndUpdate(
                             {_id:courseId},
                             {
                                 $push:{
@@ -60,7 +60,6 @@ exports.createRating = async(req,res) => {
         })
     }
 }
-
 
 // getAverageRating
 exports.getAverageRating = async(req,res) => {
@@ -121,7 +120,7 @@ exports.getAllRating = async(req,res) => {
         return res.status(200).json({
             success:true,
             message:"All reviews fetched successfully",
-            allReviews
+            data:allReviews
         })
 
     }catch(error){
