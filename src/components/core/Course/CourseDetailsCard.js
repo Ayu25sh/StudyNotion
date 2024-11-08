@@ -48,8 +48,7 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
   }
 
   // console.log("Student already enrolled ", course?.studentsEnroled, user?._id)
-  const [instruct,setInstruct] = useState();
-
+  const [instruct,setInstruct] = useState([]);
   useEffect( ()=> {
     setInstruct(JSON.parse(course?.instructions));
   },[]) 
@@ -70,7 +69,10 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
           <div className="space-x-3 pb-4 text-3xl font-semibold">
             Rs. {CurrentPrice}
           </div>
+
+          {/* set of button */}
           <div className="flex flex-col gap-4">
+
             <button
               className="yellowButton"
               onClick={
@@ -83,12 +85,15 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
                 ? "Go To Course"
                 : "Buy Now"}
             </button>
+
             {(!user || !course?.studentsEnrolled.includes(user?._id)) && (
               <button onClick={handleAddToCart} className="blackButton">
                 Add to Cart
               </button>
             )}
+
           </div>
+
           <div>
             <p className="pb-3 pt-6 text-center text-sm text-richblack-25">
               30-Day Money-Back Guarantee
@@ -101,7 +106,7 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
             </p>
             <div className="flex flex-col gap-3 text-sm text-caribbeangreen-100">
               {instruct.map((item, i) => {
-                console.log("item",item);
+                // console.log("item",item);
                 return (
                   <p className={`flex gap-2`} key={i}>
                     <BsFillCaretRightFill />
@@ -111,18 +116,23 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
               })}
             </div>
           </div>
+
           <div className="text-center">
             <button
-              className="mx-auto flex items-center gap-2 py-6 text-yellow-100 "
               onClick={handleShare}
+              className="mx-auto flex items-center gap-2 py-6 text-yellow-100 "
             >
               <FaShareSquare size={15} /> Share
             </button>
           </div>
+
         </div>
+
       </div>
     </>
   )
 }
 
 export default CourseDetailsCard
+
+
