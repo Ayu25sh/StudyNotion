@@ -40,6 +40,11 @@ const {
     getAllRating
 } = require("../controllers/RatingAndReview")
 
+//updating courseProgress
+const {
+    updateCourseProgress
+} = require("../controllers/CourseProgress");
+
 //importing middlewares
 const {
     auth,
@@ -60,7 +65,7 @@ router.put("/editCourse",auth,isInstructor,editCourse)
 router.get("/getInstructorCourses",auth,isInstructor,getInstructorCourses)
 router.post("/getFullCourseDetails", auth, getFullCourseDetails)
 router.delete("/deleteCourse",auth,isInstructor,deleteCourse)
-
+router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
 
 
 // *********************************************************************************
@@ -78,7 +83,7 @@ router.delete("/deleteSubSection",auth,isInstructor,deleteSubSection)
 
 
 // *********************************************************************************
-//                            Category
+//                            Category Routes 
 // *********************************************************************************
 
 router.post("/createCategory",auth,isAdmin,createCategory)
@@ -92,6 +97,6 @@ router.post("/getCategoryPageDetails",categoryPageDetails)
 
 router.post("/createRating",auth,isStudent,createRating)
 router.get("/getAverageRating",getAverageRating)
-router.get("/getAllRating",getAllRating)
+router.get("/getReviews",getAllRating)
 
 module.exports = router
