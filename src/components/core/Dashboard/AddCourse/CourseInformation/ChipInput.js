@@ -20,7 +20,7 @@ export default function ChipInput({
         if (editCourse) {
             // console.log(course)
             // manually populate the chips with existing course tags 
-            setChips(course?.tag)
+            setChips((course?.tag));
         }
         register(name, { required: true, validate: (value) => value.length > 0 })
     }, [])
