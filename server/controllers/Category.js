@@ -106,24 +106,24 @@ exports.showAllCategories = async (req,res) => {
 exports.categoryPageDetails = async (req, res) => {
   try {
     const { categoryId } = req.body
-    // console.log("PRINTING CATEGORY ID: ", categoryId);
+    console.log("PRINTING CATEGORY ID: ", categoryId);
     // Get courses for the specified category
 
     const selectedCategory = await Category.findById(categoryId)
       .populate({
         path: "courses",
-        populate: {
-          path :"instructor",
-          populate: {
-            path:"additionalDetails"
-          },
-        },
+        // populate: {
+        //   path :"instructor",
+        //   populate: {
+        //     path:"additionalDetails"
+        //   },
+        // },
         match: { status: "Published" },
-        // populate: "ratingAndReview",
+        populate: "ratingAndReview",
       })
       .exec()
 
-    // console.log("SELECTED COURSE", selectedCategory)
+    console.log("SELECTED COURSE", selectedCategory)
 
     // Handle the case when the category is not found
     if (!selectedCategory) {
@@ -150,34 +150,21 @@ exports.categoryPageDetails = async (req, res) => {
       categoriesExceptSelected[getRandomInt(categoriesExceptSelected.length)]
         ._id
     )
-    .populate({
-      path: "courses",
-      populate: {
-        path :"instructor",
-        populate: {
-          path:"additionalDetails"
-        },
-      },
-      match: { status: "Published" },
-      // populate: "ratingAndReview",
-    })
-    .exec()
+      .populate({
+        path: "courses",
+        match: { status: "Published" },
+      })
+      .exec()
     // console.log("Different COURSE", differentCategory)
 
     // Get top-selling courses across all categories
     const allCategories = await Category.find()
-    .populate({
-      path: "courses",
-      populate: {
-        path :"instructor",
-        populate: {
-          path:"additionalDetails"
-        },
-      },
-      match: { status: "Published" },
-      // populate: "ratingAndReview",
-    })
-    .exec()
+        .populate({
+          path: "courses",
+          match: { status: "Published" },
+          populate: "ratingAndReview",
+        })
+        .exec()
 
     const allCourses = allCategories.flatMap((category) => category.courses)
     const mostSellingCourses = allCourses
