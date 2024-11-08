@@ -25,9 +25,6 @@ export default function Navbar() {
     const {token} = useSelector( (state) => state.auth);
     const {user} = useSelector( (state) => state.profile);
     const {totalItems} = useSelector( (state) => state.cart);
-
-    
-
     const [subLinks, setSubLinks] = useState([])
     const [loading, setLoading] = useState(false)
   
@@ -44,7 +41,7 @@ export default function Navbar() {
       })()
     }, [])
   
-    console.log("sub links", subLinks)
+    // console.log("sub links", subLinks)
 
     const location = useLocation();
     const matchRoute = (route) => {
@@ -92,7 +89,7 @@ export default function Navbar() {
                                   className="rounded-lg bg-transparent py-4 pl-4 hover:bg-richblack-50"
                                   key={i}
                                 >
-                                  <p className='text-yellow-50'>{subLink.name}</p>
+                                  <p>{subLink.name}</p>
                                 </Link>
                               ))}
                           </>
