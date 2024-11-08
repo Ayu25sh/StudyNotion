@@ -7,6 +7,7 @@ import Course_Card from '../components/core/Catalog/Course_Card'
 import CourseSlider from '../components/core/Catalog/CourseSlider'
 import { useSelector } from 'react-redux'
 import Error from "./Error"
+import Footer from '../components/common/Footer'
 
 
 const Catalog = () => {
@@ -35,9 +36,9 @@ const Catalog = () => {
   useEffect( () => {
     const getCategoryDetails = async() => {
       try{
-        console.log("ID ---",categoryId)
+        // console.log("ID ---",categoryId)
         const result = await getCatalogPageData(categoryId);
-        console.log("RESponse ---",result);
+        // console.log("RESponse ---",result);
         setCatalogPageData(result);
       }catch(error){
         console.log(error);
@@ -83,7 +84,7 @@ const Catalog = () => {
             <div className="section_heading">Courses to get you started</div>
             <div className="my-4 flex border-b border-b-richblack-600 text-sm"> 
                 <p className={`px-4 py-2 ${active === 1 ? "text-yellow-25 border-b border-b-yellow-25" : "text-richblack-50" } cursor-pointer`}
-                  onClick={ () => setActive(1)}  >Most Popular</p>
+                  onClick={ () => setActive(1)}>Most Popular</p>
                 <p className={`px-4 py-2 ${active === 2 ? "text-yellow-25 border-b border-b-yellow-25" : "text-richblack-50" } cursor-pointer`}
                   onClick={ () => setActive(2)}>New</p>
             </div>
@@ -117,7 +118,7 @@ const Catalog = () => {
           </div>
 
       
-      {/* <Footer /> */}
+      <Footer />
     </div>
   )
 }
