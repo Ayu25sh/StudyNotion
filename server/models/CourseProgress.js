@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const courseProgressSchema = new mongoose.Schema({
-    courseId: {
+    courseID: {
         type:mongoose.Schema.Types.ObjectId,
         ref:"Course",
     },
-    userId: {
+    userID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
