@@ -248,7 +248,7 @@ exports.getCourseDetails = async (req, res) => {
     let totalDurationInSeconds = 0
     courseDetails.courseContent.forEach((content) => {
       content.subSection.forEach((subSection) => {
-        const timeDurationInSeconds = parseInt(subSection.timeDuration)
+        const timeDurationInSeconds = parseInt(subSection.duration)
         totalDurationInSeconds += timeDurationInSeconds
       })
     })
@@ -430,7 +430,7 @@ exports.getFullCourseDetails = async (req, res) => {
   try {
     const { courseId } = req.body
     const userId = req.user.id
-    console.log("CourseId",courseId);
+    // console.log("CourseId",courseId);
     const courseDetails = await Course.findOne({
       _id: courseId,
     })
@@ -452,7 +452,7 @@ exports.getFullCourseDetails = async (req, res) => {
 
     let courseProgressCount = await CourseProgress.findOne({
       courseID: courseId,
-      userId: userId,
+      userID: userId,
     })
 
     console.log("courseProgressCount : ", courseProgressCount)
@@ -474,13 +474,14 @@ exports.getFullCourseDetails = async (req, res) => {
     let totalDurationInSeconds = 0
     courseDetails.courseContent.forEach((content) => {
       content.subSection.forEach((subSection) => {
-        const timeDurationInSeconds = parseInt(subSection.timeDuration)
+        const timeDurationInSeconds = parseInt(subSection.duration)
         totalDurationInSeconds += timeDurationInSeconds
       })
     })
 
     const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
     console.log("details",courseDetails)
+
 
     return res.status(200).json({
       success: true,
