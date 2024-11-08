@@ -11,7 +11,7 @@ const RequirementField = ({name,label,register,errors,setValue,getValues}) => {
 
     useEffect( () => {
         if (editCourse) {
-            setRequirementList(course?.instructions)
+            setRequirementList((course?.instructions))
         }
 
         register(name,{
@@ -61,13 +61,14 @@ const RequirementField = ({name,label,register,errors,setValue,getValues}) => {
                 <ul className="mt-2 list-inside list-disc">
                     {
                         requirementList?.map( (requirement,index) => {
-                            console.log(requirement)
+                            // console.log(requirement)
                             return (
                                 <li key={index} className="flex items-center text-richblack-5">
 
                                 <span>{requirement}</span>
                                 <button
                                     type='button'
+                                    className="ml-2 text-xs text-pure-greys-300 "
                                     onClick={() => handleRemoveRequirement(index)}                                
                                 >
                                     clear
