@@ -1,10 +1,14 @@
 const express = require("express");
 const app = express();
 
+const timeout = require('connect-timeout');
+
 const userRoutes = require("./routes/User.js");
 const courseRoutes = require("./routes/Course.js");
-const paymentRoutes = require("./routes/Payment.js");
+const paymentRoutes = require("./routes/Payments.js");
 const profileRoutes = require("./routes/Profile.js");
+const contactUsRoute = require("./routes/Contact.js");
+
 
 const cookieParser = require('cookie-parser');
 const cors = require("cors");
@@ -24,15 +28,18 @@ app.use(fileUpload({
     tempFileDir : '/tmp/',
 }));
 app.use(cors({
-    origin:"http://localhost:3000",
+    origin:"https://studynotion.vercel.app",
     credentials:true,
 }));
 
 //Mounting
 app.use("/api/v1/auth",userRoutes);
 app.use("/api/v1/course",courseRoutes);
-app.use("/api/v1/payment",paymentRoutes);
+app.use("/api/v1/payment", paymentRoutes);
+app.use("/api/v1/reach", contactUsRoute);
 app.use("/api/v1/profile",profileRoutes);
+app.use(timeout('10s')); // Adjust time as needed, for example, to 30 seconds
+
 
 //default route
 app.get("/",(req,res) => {
