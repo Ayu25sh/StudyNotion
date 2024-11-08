@@ -23,12 +23,12 @@ function CourseDetails() {
     const { paymentLoading } = useSelector((state) => state.course)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
     const { courseId } = useParams()
     // console.log(`course id: ${courseId}`)
-
-    const [response, setResponse] = useState(null)
     const [confirmationModal, setConfirmationModal] = useState(null)
+
+    //fetching course Details
+    const [response, setResponse] = useState(null)
     useEffect(() => {
         const getCourseDetails = async() => {
             try{
@@ -40,69 +40,66 @@ function CourseDetails() {
                 console.log("Could not fetch Course Details")
             }
         }
-
         if(courseId){
             getCourseDetails();
         }
-        
-  }, [courseId])
+    },[courseId])
+    // useEffect( ()=> {
+    //   console.log("updated",response);
+    // },[response])
 
 
-  // Calculating Avg Review count
-  const [avgReviewCount, setAvgReviewCount] = useState(0)
-  useEffect(() => {
-    const count = GetAvgRating(response?.data?.courseDetails.ratingAndReviews)
-    setAvgReviewCount(count)
-  }, [response])
-  // console.log("avgReviewCount: ", avgReviewCount)
+    // Calculating Avg Review count
+    const [avgReviewCount, setAvgReviewCount] = useState(0)
+    useEffect(() => {
+      const count = GetAvgRating(response?.data?.courseDetails.ratingAndReview)
+      setAvgReviewCount(count)
+    },[response])
+    // console.log("avgReviewCount: ", avgReviewCount)
 
-  // // Collapse all
-  // const [collapse, setCollapse] = useState("")
-  const [isActive, setIsActive] = useState(Array(0))
-  const handleActive = (id) => {
-    // console.log("called", id)
-    setIsActive(
-      !isActive.includes(id)
-        ? isActive.concat([id])
-        : isActive.filter((e) => e !== id)
-    )
-  }
 
-  // Total number of lectures
-  const [totalNoOfLectures, setTotalNoOfLectures] = useState(0)
-  useEffect(() => {
-    let lectures = 0
-    response?.data?.courseDetails?.courseContent?.forEach((sec) => {
-      lectures += sec.subSection.length || 0
-    })
-    setTotalNoOfLectures(lectures)
-  }, [response])
+    // Total number of lectures
+    const [totalNoOfLectures, setTotalNoOfLectures] = useState(0)
+    useEffect(() => {
+      let lectures = 0
+      response?.data?.courseDetails?.courseContent?.forEach((sec) => {
+        // console.log("1",sec);
+        // console.log("2",sec.subSection);
+        // console.log("3",sec.subSection.length);
+        lectures += sec.subSection.length || 0
+      })
+      setTotalNoOfLectures(lectures)
+    },[response])
 
-  if (loading || !response) {
-    return (
-      <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
-        <div className="spinner"></div>
-      </div>
-    )
-  }
-  if (!response.success) {
-    return <Error />
-  }
 
-  const {
-    _id: course_id,
-    courseName,
-    courseDescription,
-    thumbnailImage,
-    price,
-    whatYouWillLearn,
-    courseContent,
-    ratingAndReview,
-    instructor,
-    studentsEnrolled,
-    createdAt,
-  } = response.data?.courseDetails
+    // Collapse all
+    const [isActive, setIsActive] = useState(Array(0))
+    const handleActive = (id) => {
+      // console.log("called", id)
+      setIsActive(
+          !isActive.includes(id)
+          ? isActive.concat([id])
+          : isActive.filter((e) => e !== id)
+      )
+    }
 
+
+    const {
+      _id: course_id = '',
+      courseName = '',
+      courseDescription = '',
+      thumbnailImage = '',
+      price = 0,
+      whatYouWillLearn = [],
+      courseContent = [],
+      ratingAndReview = [],
+      instructor = {},
+      studentsEnrolled = 0,
+      createdAt = '',
+    } = response?.data?.courseDetails || {};
+
+
+  //handler for buying a course
   const handleBuyCourse = () => {
     if (token) {
       buyCourse(token, [courseId], user, navigate, dispatch)
@@ -118,6 +115,20 @@ function CourseDetails() {
     })
   }
 
+
+  if (loading || !response) {
+    return (
+      <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
+        <div className="spinner"></div>
+      </div>
+    )
+  }
+
+  if (!response.success) {
+    return <Error />
+  }
+
+
   if (paymentLoading) {
     // console.log("payment loading")
     return (
@@ -130,17 +141,11 @@ function CourseDetails() {
   return (
     <>
       <div className={`relative w-full bg-richblack-800`}>
+
         {/* Hero Section */}
         <div className="mx-auto box-content px-4 lg:w-[1260px] 2xl:relative ">
           <div className="mx-auto grid min-h-[450px] max-w-maxContentTab justify-items-center py-8 lg:mx-0 lg:justify-items-start lg:py-0 xl:max-w-[810px]">
-            <div className="relative block max-h-[30rem] lg:hidden">
-              <div className="absolute bottom-0 left-0 h-full w-full shadow-[#161D29_0px_-64px_36px_-28px_inset]"></div>
-              <img
-                src={thumbnailImage}
-                alt="course thumbnail"
-                className="aspect-auto w-full"
-              />
-            </div>
+
             <div
               className={`z-30 my-5 flex flex-col justify-center gap-4 py-5 text-lg text-richblack-5`}
             >
@@ -172,29 +177,22 @@ function CourseDetails() {
                 </p>
               </div>
             </div>
-            <div className="flex w-full flex-col gap-4 border-y border-y-richblack-500 py-4 lg:hidden">
-              <p className="space-x-3 pb-4 text-3xl font-semibold text-richblack-5">
-                Rs. {price}
-              </p>
-              <button className="yellowButton" onClick={handleBuyCourse}>
-                Buy Now
-              </button>
-              <button className="blackButton">Add to Cart</button>
-            </div>
           </div>
 
           {/* Courses Card */}
           <div className="right-[1rem] top-[60px] mx-auto hidden min-h-[600px] w-1/3 max-w-[410px] translate-y-24 md:translate-y-0 lg:absolute  lg:block">
             <CourseDetailsCard
               course={response?.data?.courseDetails}
-              setConfirmationModal={setConfirmationModal}
-              handleBuyCourse={handleBuyCourse}
+              setConfirmationModal={setConfirmationModal} // showing when user not logged in but try to buy the course
+              handleBuyCourse={handleBuyCourse} 
             />
           </div>
         </div>
+
       </div>
 
       <div className="mx-auto box-content px-4 text-start text-richblack-5 lg:w-[1260px]">
+
         <div className="mx-auto max-w-maxContentTab lg:mx-0 xl:max-w-[810px]">
 
           {/* What will you learn section */}
@@ -207,8 +205,11 @@ function CourseDetails() {
 
           {/* Course Content Section */}
           <div className="max-w-[830px] ">
+
+            {/* details */}
             <div className="flex flex-col gap-3">
               <p className="text-[28px] font-semibold">Course Content</p>
+
               <div className="flex flex-wrap justify-between gap-2">
                 <div className="flex gap-2">
                   <span>
@@ -228,6 +229,7 @@ function CourseDetails() {
                   </button>
                 </div>
               </div>
+
             </div>
 
             {/* Course Details Accordion */}
@@ -244,7 +246,9 @@ function CourseDetails() {
 
             {/* Author Details */}
             <div className="mb-12 py-4">
+
               <p className="text-[28px] font-semibold">Author</p>
+
               <div className="flex items-center gap-4 py-4">
                 <img
                   src={
@@ -257,13 +261,18 @@ function CourseDetails() {
                 />
                 <p className="text-lg">{`${instructor.firstName} ${instructor.lastName}`}</p>
               </div>
+
               <p className="text-richblack-50">
                 {instructor?.additionalDetails?.about}
               </p>
+
             </div>
+
+
           </div>
         </div>
       </div>
+      
       {/* <Footer /> */}
       {confirmationModal && <ConfirmationModal modalData={confirmationModal} />}
     </>
