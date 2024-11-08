@@ -7,7 +7,7 @@ export default function CourseAccordionBar({ course, isActive, handleActive }) {
   const contentEl = useRef(null)
 
   // Accordian state
-  const [active, setActive] = useState(false)
+  const[active, setActive] = useState(false)
   useEffect(() => {
     setActive(isActive?.includes(course._id))
   }, [isActive])
@@ -18,6 +18,7 @@ export default function CourseAccordionBar({ course, isActive, handleActive }) {
 
   return (
     <div className="overflow-hidden border border-solid border-richblack-600 bg-richblack-700 text-richblack-5 last:mb-0">
+      
       <div>
         <div
           className={`flex cursor-pointer items-start justify-between bg-opacity-20 px-7  py-6 transition-[0.3s]`}
