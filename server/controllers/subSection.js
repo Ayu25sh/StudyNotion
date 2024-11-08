@@ -16,18 +16,19 @@ exports.createSubSection = async (req, res) => {
           .status(404)
           .json({ success: false, message: "All Fields are Required" })
       }
-      console.log(video)
+      // console.log("1",video)
   
       // Upload the video file to Cloudinary
+      console.log("BEFORE");
       const uploadDetails = await uploadImageToCloudinary(
         video,
         process.env.FOLDER_NAME
-      )
-      console.log(uploadDetails)
+      ) 
+
       // Create a new sub-section with the necessary information
       const SubSectionDetails = await SubSection.create({
         title: title,
-        timeDuration: `${uploadDetails.duration}`,
+        duration: `${uploadDetails.duration}`,
         description: description,
         videoUrl: uploadDetails.secure_url,
       })
@@ -80,7 +81,7 @@ exports.updateSubSection = async (req, res) => {
                 process.env.FOLDER_NAME
             )
             subSection.videoUrl = uploadDetails.secure_url
-            subSection.timeDuration = `${uploadDetails.duration}`
+            subSection.duration = `${uploadDetails.duration}`
         }
   
         await subSection.save()
