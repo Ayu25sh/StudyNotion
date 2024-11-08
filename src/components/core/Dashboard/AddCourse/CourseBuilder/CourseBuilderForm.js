@@ -18,7 +18,7 @@ const CourseBuilderForm = () => {
   
   const dispatch = useDispatch();
   const [loading,setLoading] = useState(false);
-  const [editSectionName,setEditSectionName] = useState(null);
+  const [editSectionName,setEditSectionName] = useState(false);
 
 
   const onSubmit = async(data) => {
@@ -27,6 +27,7 @@ const CourseBuilderForm = () => {
 
     // deals with backend
     if(editSectionName) {
+      console.log("before calling from front")
       result = await updateSection(
         {
           sectionName: data.sectionName,
@@ -34,15 +35,15 @@ const CourseBuilderForm = () => {
           courseId: course._id
         },token
       )
+      console.log("after calling from front",result)
+
     }
     else{
+      console.log("before");
       result = await createSection({
         sectionName: data.sectionName,
         courseId: course._id,
-
       },token)
-      console.log("COURSE_ID",course._id)
-      console.log(result)
 
     }
 
@@ -64,6 +65,7 @@ const CourseBuilderForm = () => {
 
   const goBack = () => {
     dispatch(setEditCourse(true))
+    dispatch(setStep(1));
   }
 
   const goToNext = () => {
@@ -90,65 +92,71 @@ const CourseBuilderForm = () => {
   }
 
   return (
-    <div>
-      <p>Course Builder</p>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="space-y-8 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6">
+      <p className="text-2xl font-semibold text-richblack-5">Course Builder</p>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
         {/* section name*/}
-        <div>
-          <label htmlFor='sectionName'>Section name<sup>*</sup></label>
+        <div  className="flex flex-col space-y-2">
+          <label  className="text-sm text-richblack-5" htmlFor="sectionName">Section Name <sup className='text-pink-200'>*</sup></label>
           <input 
             id='sectionName'
-            placeholder='Add Section Name'
-            {...register('sectionName',{required:true})}
+            disabled={loading}
+            placeholder="Add a section to build your course"
+            {...register("sectionName", { required: true })}
+            className="form-style w-full"
           />
           {errors.sectionName && (
-            <span>Section Name is required</span>
+            <span className="ml-2 text-xs tracking-wide text-pink-200">Section Name is required</span>
           )}
         </div>
 
         {/* button nd icon */}
-        <div className='flex text-richblack-5'>
+        <div className="flex items-end gap-x-4">
           <IconBtn
             type="Submit"
+            disabled={loading}
             text={editSectionName ? "Edit Section Name" : "Create Section"}
             outline={true}
-            customClasses={"text-white"}
             icon={true}
+            
           >
-            <MdAddCircleOutline className='text-yellow ' size={20} />
+            <MdAddCircleOutline className='text-yellow-50' size={20} />
           </IconBtn>
           {editSectionName && (
             <button
               type='button'
               onClick={cancelEdit}
-              className='text-sm text-richblack-300 underline'
+              className="text-sm text-richblack-300 underline"            
             >
               Cancel Edit
             </button>
           )}
         </div>
+
       </form>
 
-
-        {course.courseContent.length > 0 && (
+        {course?.courseContent?.length > 0 && (
           <NestedView handleChangeSectionName ={handleChangeSectionName} />
         )}
 
         <div className='flex justify-end gap-x-3'>
+
           <button
             onClick={goBack}
-            className='rounded-md cursor-pointer flex items-center'
+            className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900`}   
           >
             Back
           </button>
-          <IconBtn text={"Next"} onClick={goToNext} >
+
+          <IconBtn disabled={loading} text={"Next"} onClick={goToNext} icon={true}>
             <BiRightArrow />
           </IconBtn>
+          
         </div>
 
     </div>
   )
 }
 
-export default CourseBuilderForm
+export default CourseBuilderForm;
