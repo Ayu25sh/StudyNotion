@@ -10,6 +10,8 @@ import {toast} from "react-toastify"
 import { COURSE_STATUS } from "../../../../../utils/Constants"
 import ChipInput from "./ChipInput"
 import Upload from "../Upload"
+import { MdNavigateNext } from "react-icons/md"
+
 
 const CourseInformationForm = () => {
     const {
@@ -48,8 +50,8 @@ const CourseInformationForm = () => {
             setValue("courseTitle",course.courseName);
             setValue("courseShortDesc",course.courseDescription);
             setValue("coursePrice",course.price);
-            console.log("Tags",course.tag);
-            console.log("Instructions",course.instructions);
+            // console.log("Tags",course.tag);
+            // console.log("Instructions",course.instructions);
 
             setValue("courseTags",course.tag);
             setValue("courseCategory", course.category)
@@ -151,9 +153,9 @@ const CourseInformationForm = () => {
           try {
             setLoading(true);
 
-            console.log("Before hit from form side");
+            // console.log("Before hit from form side");
             const result = await addCourseDetails(formData, token);
-            console.log("After hit from form side", result);
+            // console.log("After hit from form side", result);
           
             if (result) {
               // Successfully created course, move to step 2 and set the course in the state
@@ -166,82 +168,101 @@ const CourseInformationForm = () => {
           } finally {
             // Ensure that loading is set to false regardless of success or failure
             setLoading(false);
-          }
-          
-          
+          }     
     }
-
-    
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}
-        className="space-y-8 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6"
+          className="space-y-8 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6"    
     >
 
         {/* CourseTitle */}
-        <div>
-            <label>Course Title<sup>*</sup> </label>
+        <div className="flex flex-col space-y-2">
+            <label className="text-sm text-richblack-5" htmlFor="courseTitle">
+              Course Title <sup className="text-pink-200">*</sup> 
+            </label>
             <input 
                 type='text'
                 placeholder='Enter Course Title'
                 id='courseTitle'
                 {...register('courseTitle',{required:true})}
-                className='w-full text-richblack-900'
+                className="form-style w-full"
             />
             {
                 errors.courseTitle && (
-                    <span>Course Title is Required</span>
+                    <span className="ml-2 text-xs tracking-wide text-pink-200">Course Title is Required</span>
                 )
             }
         </div>
 
         {/* Course Short Description */}
-        <div>
-            <label>Course Short Description<sup>*</sup></label>
+        <div className="flex flex-col space-y-2">
+            <label className="text-sm text-richblack-5" htmlFor="courseShortDesc">
+              Course Short Description <sup className="text-pink-200">*</sup>
+            </label>
             <textarea
                 placeholder='Enter Description'
                 id='courseShortDesc'
                 {...register('courseShortDesc',{required:true})}
+                className="form-style resize-x-none min-h-[130px] w-full"
             />
             {
                 errors.courseShortDesc && (
-                    <span>Course Description is Required</span>
+                    <span className="ml-2 text-xs tracking-wide text-pink-200">
+                      Course Description is Required
+                    </span>
                 )
             }
         </div>
 
         {/* Course Price */}
-        <div className='relative'>
-            <label>Course Price<sup>*</sup> </label>
-            <input 
+        <div className="flex flex-col space-y-2">
+            <label className="text-sm text-richblack-5" htmlFor="coursePrice">
+              Course Price <sup className="text-pink-200">*</sup>
+            </label>
+            
+            <div className='relative'> 
+
+              <input 
                 placeholder='Enter Price'
                 id='coursePrice'
                 {...register('coursePrice',{
                     required:true,
-                    valueAsNumber:true})}
-                className='w-full'
-            />
-            <HiOutlineCurrencyRupee className='absolute top-1/2 text-richblack-400 ' />
+                    valueAsNumber:true,
+                    pattern: {
+                      value: /^(0|[1-9]\d*)(\.\d+)?$/,
+                    },
+                })}
+                className="form-style w-full !pl-12"
+              />
+              <HiOutlineCurrencyRupee className="absolute left-3 top-1/2 inline-block -translate-y-1/2 text-2xl text-richblack-400" />
+
+          </div>
             {
                 errors.coursePrice && (
-                    <span>Course Price is Required</span>
+                    <span className="ml-2 text-xs tracking-wide text-pink-200">
+                      Course Price is Required
+                    </span>
                 )
             }
         </div>
 
         {/* Course Category */}
-        <div>
-            <label htmlFor='courseCategory' >Course Category<sup>*</sup> </label>
+        <div className="flex flex-col space-y-2">
+            <label className="text-sm text-richblack-5" htmlFor="courseCategory" >
+              Course Category <sup className="text-pink-200">*</sup> 
+            </label>
             <select
                 id='courseCategory'
                 defaultValue=""
                 {...register("courseCategory",{required:true})}
+                className="form-style w-full"
+
             >
                 <option value="" disabled>Choose a Category</option>
                 {
                     !loading  && courseCategories.map( (category ,index) => (
-                        <option className='text-white' key={index} value={category?._id}>
+                        <option key={index} value={category?._id}>
                             {category?.name}
                         </option>
                     ))
@@ -250,7 +271,7 @@ const CourseInformationForm = () => {
             </select>
             {
                 errors.courseCategory && (
-                    <span>Course Category is Required</span>
+                    <span className="ml-2 text-xs tracking-wide text-pink-200">Course Category is Required</span>
                 )
             }
         </div>
@@ -277,16 +298,21 @@ const CourseInformationForm = () => {
         />
 
         {/* Benefits of the Course */}
-        <div>
-            <label htmlFor='courseBenefits' >Benefits of the Course <sup>*</sup> </label>
+        <div className="flex flex-col space-y-2">
+            <label className="text-sm text-richblack-5" htmlFor="courseBenefits" >
+              Benefits of the Course <sup className="text-pink-200">*</sup> 
+            </label>
             <textarea 
                 id='courseBenefits'
                 placeholder='Benefits of the Course'
                 {...register('courseBenefits',{required:true})}
+                className="form-style resize-x-none min-h-[130px] w-full"
             />
             {
                 errors.courseBenefits && (
-                    <span>Benefits of the Course are required</span>
+                    <span className="ml-2 text-xs tracking-wide text-pink-200">
+                      Benefits of the Course are required
+                    </span>
                 )
             }
         </div>
@@ -302,20 +328,25 @@ const CourseInformationForm = () => {
         />
 
         {/* next button */}
-        <div>
+        <div className="flex justify-end gap-x-2">
             {
                 editCourse && (
                     <button
                         onClick={ () => dispatch(setStep(2))}
+                        disabled={loading}
+                        className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900`}
                     >
-                        Continue Without Saving
+                      Continue Without Saving
                     </button>
                 )
             }
+            <IconBtn
+              text={!editCourse ? "Next" : "Save Changes"} 
+              icon={true}
+            >
+              <MdNavigateNext />
+            </IconBtn>
         </div>
-        <IconBtn 
-            text={!editCourse ? "Next" : "Save Changes"} icon={true}
-        />
 
     </form>
   )
