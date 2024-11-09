@@ -11,6 +11,7 @@ const ConfirmationModal = ({modalData}) => {
                 <IconBtn 
                     onClick={modalData?.btn1Handler}
                     text={modalData?.btn1Text}
+                    icon={true}
                 />
                 <button
                     onClick={modalData?.btn2Handler}
