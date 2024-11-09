@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
   step: 1,
-  course: { courseContent: [] },  // Initialize with default structure
+  course: null,  // Initialize with default structure
   editCourse: false,
   paymentLoading: false,
 }
@@ -16,7 +16,7 @@ const courseSlice = createSlice({
       state.step = action.payload
     },
     setCourse: (state, action) => {
-      state.course = action.payload || { courseContent: [] }; // Fallback to empty structure
+      state.course = action.payload ; 
     },
     setEditCourse: (state, action) => {
       state.editCourse = action.payload
@@ -26,7 +26,7 @@ const courseSlice = createSlice({
     },
     resetCourseState: (state) => {
       state.step = 1
-      state.course = { courseContent: [] } // Reset to initial structure
+      state.course = null // Reset to initial structure
       state.editCourse = false
     },
   },
