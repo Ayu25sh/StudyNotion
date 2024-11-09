@@ -4,15 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import IconBtn from '../../../../common/IconBtn';
 import { resetCourseState, setStep } from '../../../../../Slices/courseSlice';
 import { COURSE_STATUS } from '../../../../../utils/Constants';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { editCourseDetails } from '../../../../../services/operations/courseDetailsAPI';
 
 export default function PublishCourse() {
 
-    const {handleSubmit,register,setValue, getValues, formState: {errors}} = useForm()
+    const {handleSubmit,register, getValues, formState:{errors}} = useForm()
     const {course} = useSelector(state => state.course);
     const {token} = useSelector(state => state.auth);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [loading,setLoading] = useState()
 
@@ -22,7 +23,7 @@ export default function PublishCourse() {
 
     const goToCourses = () => {
         dispatch(resetCourseState())
-        // navigate("/dashboard/my-courses");
+        navigate("/dashboard/my-courses");
     }
 
     const handleCoursePublish = async() => {
@@ -52,33 +53,39 @@ export default function PublishCourse() {
     }
 
   return (
-    <div className='rounded-md border-[1px] bg-richblack-800 border-richblack-700'>
-        <p className='text-richblack-300 text'>Publish Course</p>
+    <div className="rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6">
+        <p className="text-2xl font-semibold text-richblack-5">Publish Course</p>
+
         <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
-                <label htmlFor='public'>
-                <input 
-                    id='public'
-                    type='checkbox'
-                    {...register("public")}
-                    className='rounded h-4 w-4'
-                />
-                <span className='ml-3'>Make this Course as Public</span>
+
+            {/* checkbox */}
+            <div className="my-6 mb-8">
+                <label htmlFor='public' className="inline-flex items-center text-lg">
+                    <input 
+                        id='public'
+                        type='checkbox'
+                        {...register("public")}
+                        className="border-gray-300 h-4 w-4 rounded bg-richblack-500 text-richblack-400 focus:ring-2 focus:ring-richblack-5"
+                    />
+                    <span className="ml-2 text-richblack-400">
+                        Make this Course as Public
+                    </span>
                 </label>
             </div>
-
-            <div>
+            
+            {/* Next Prev Button */}
+            <div className="ml-auto flex max-w-max items-center gap-x-4">
                 <button 
                     disabled={loading}
                     type='button'
                     onClick={goBack}
-                    className='flex items-center rounded-md'
-                >
+                    className="flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900"
+                    >
                     Back
                 </button>
                 <IconBtn 
                     disabled={loading}
-                    text="save changes"
+                    text="Save changes"
                     icon={true}
                 />
             </div>
