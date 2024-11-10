@@ -50,7 +50,7 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
   // console.log("Student already enrolled ", course?.studentsEnroled, user?._id)
   const [instruct,setInstruct] = useState([]);
   useEffect( ()=> {
-    setInstruct(JSON.parse(course?.instructions));
+    setInstruct(course?.instructions);
   },[]) 
 
   return (
