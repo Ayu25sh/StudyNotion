@@ -28,7 +28,7 @@ app.use(fileUpload({
     tempFileDir : '/tmp/',
 }));
 app.use(cors({
-    origin:"http://studynotionlive.vercel.app",
+    origin:"https://studynotionlive.vercel.app",
     credentials:true,
 }));
 
