@@ -88,12 +88,12 @@ const Catalog = () => {
                 <p className={`px-4 py-2 ${active === 2 ? "text-yellow-25 border-b border-b-yellow-25" : "text-richblack-50" } cursor-pointer`}
                   onClick={ () => setActive(2)}>New</p>
             </div>
-            <div>
+            <div className='pr-4'>
               <CourseSlider courses={catalogPageData?.data?.selectedCategory?.courses}/>
             </div>
           </div>
 
-          {/* section 2 */}
+          {/* section 2
           <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
               <div className="section_heading">
                 Top Courses in {catalogPageData?.data?.selectedCategory?.name}
@@ -101,16 +101,16 @@ const Catalog = () => {
               <div className="py-8">
                   <CourseSlider courses={catalogPageData?.data?.differentCategory?.courses} />
               </div>
-          </div>
+          </div> */}
 
           {/* section 3 */}
           <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
               <div className="section_heading">Frequently Bought</div>
-              <div className='py-8'>
+              <div className='py-8 pr-4'>
                   <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                       {
                         catalogPageData?.data?.mostSellingCourses?.slice(0,4).map( (course,index) => (
-                            <Course_Card course={course} key={index} Height={"h-[400px]"} />
+                            <Course_Card course={course} key={index} Height={"h-[350px]"} />
                         ) )
                       }
                   </div>
