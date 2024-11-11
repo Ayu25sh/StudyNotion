@@ -29,6 +29,7 @@ app.use(fileUpload({
 }));
 app.use(cors({
     origin:"https://studynotionlive.vercel.app",
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials:true,
 }));
 
